@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GastoDominicano - Controla tus gastos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --success: #06d6a0;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray-100: #f8f9fa;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #ced4da;
+            --gray-500: #adb5bd;
+            --gray-600: #6c757d;
+            --gray-700: #495057;
+            --gray-800: #343a40;
+            --gray-900: #212529;
+            
+            --border-radius: 16px;
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e7ec 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--dark);
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 24px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--gray-300);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* Expense List */
+        .expense-list {
+            list-style: none;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 20px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .expense-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+            transform: translateX(4px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .expense-details {
+            flex-grow: 1;
+        }
+
+        .expense-title {
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .expense-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .expense-amount {
+            font-weight: 700;
+            color: var(--danger);
+            font-size: 1.1rem;
+        }
+
+        .expense-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--gray-500);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background-color: rgba(239, 71, 111, 0.1);
+            color: var(--danger);
+        }
+
+        /* Summary */
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .total-amount {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        /* Filters */
+        .filters {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 600px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 30px 0;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .developer {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--gray-500);
+        }
+
+        .empty-state i {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--gray-300);
+            opacity: 0.7;
+        }
+
+        .empty-state p {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        /* Login Page */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 460px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-logo i {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .login-logo h1 {
+            font-size: 2rem;
+            color: var(--dark);
+            font-weight: 700;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--gray-600);
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Reportes Section */
+        .reports-section {
+            display: none;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border-radius: 12px;
+            color: var(--gray-500);
+            font-weight: 600;
+        }
+
+        /* Configuración Section */
+        .settings-section {
+            display: none;
+        }
+
+        .settings-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .settings-option:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-weight: 500;
+        }
+
+        .settings-desc {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-300);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 16px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glassmorphism effect for some elements */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* Modern scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Página de Login -->
+        <div id="login-page" class="login-container">
+            <div class="login-card fade-in">
+                <div class="login-logo">
+                    <i class="fas fa-money-bill-wave float-animation"></i>
+                    <h1>GastoDominicano</h1>
+                    <p>Controla tus gastos al estilo dominicano</p>
+                </div>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" id="password" class="form-control" placeholder="Tu contraseña" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                </form>
+                <div class="login-footer">
+                    <p>¿No tienes cuenta? <a href="#" id="register-link">Regístrate aquí</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aplicación principal (inicialmente oculta) -->
+        <div id="app" class="hidden">
+            <!-- Header -->
+            <header class="header glass-effect">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>GastoDominicano</span>
+                    </div>
+                    <nav class="nav-links">
+                        <a href="#" class="active" data-section="inicio"><i class="fas fa-home"></i> Inicio</a>
+                        <a href="#" data-section="reportes"><i class="fas fa-chart-pie"></i> Reportes</a>
+                        <a href="#" data-section="configuracion"><i class="fas fa-cog"></i> Configuración</a>
+                    </nav>
+                    <div class="user-info">
+                        <div class="avatar">U</div>
+                        <span>Usuario</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Contenido principal - Inicio -->
+            <div id="inicio-section" class="main-content">
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <div class="card glass-effect">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-plus-circle"></i> Agregar Gasto</h2>
+                        </div>
+                        <form id="expense-form">
+                            <div class="form-group">
+                                <label for="description" class="form-label">Descripción</label>
+                                <input type="text" id="description" class="form-control" placeholder="¿En qué gastaste?" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="amount" class="form-label">Monto (RD$)</label>
+                                <input type="number" id="amount" class="form-control" min="0" step="0.01" placeholder="0.00" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category" class="form-label">Categoría</label>
+                                <select id="category" class="form-control" required>
+                                    <option value="">Selecciona una categoría</option>
+                                    <option value="comida">Comida (Restaurante/Colmado)</option>
+                                    <option value="transporte">Transporte (Concho/Metro)</option>
+                                    <option value="servicios">Servicios (Luz/Agua/Internet)</option>
+                                    <option value="entretenimiento">Entretenimiento (Cine/Salidas)</option>
+                                    <option value="salud">Salud (Farmacia/Médico)</option>
+                                    <option value="ropa">Ropa y Calzado</option>
+                                    <option value="educacion">Educación</option>
+                                    <option value="otros">Otros gastos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="date" class="form-label">Fecha</label>
+                                <input type="date" id="date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i class="fas fa-plus"></i> Agregar Gasto
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <div class="card glass-effect">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-chart-bar"></i> Resumen de Gastos</h2>
+                        </div>
+                        <div id="summary-container">
+                            <div class="summary-item">
+                                <span>Total gastado:</span>
+                                <span id="total-amount" class="summary-value total-amount">RD$ 0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Gasto mensual:</span>
+                                <span id="monthly-amount" class="summary-value">RD$ 0.00</span>
+                            </div>
+                            <div class="summary-item">
+                                <span>Gasto diario promedio:</span>
+                                <span id="daily-average" class="summary-value">RD$ 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contenido principal -->
+                <div class="content">
+                    <div class="card glass-effect">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-receipt"></i> Tus Gastos</h2>
+                        </div>
+                        <div class="filters">
+                            <div class="form-group">
+                                <label for="category-filter" class="form-label">Categoría</label>
+                                <select id="category-filter" class="form-control">
+                                    <option value="">Todas las categorías</option>
+                                    <option value="comida">Comida</option>
+                                    <option value="transporte">Transporte</option>
+                                    <option value="servicios">Servicios</option>
+                                    <option value="entretenimiento">Entretenimiento</option>
+                                    <option value="salud">Salud</option>
+                                    <option value="ropa">Ropa y Calzado</option>
+                                    <option value="educacion">Educación</option>
+                                    <option value="otros">Otros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="month-filter" class="form-label">Mes</label>
+                                <select id="month-filter" class="form-control">
+                                    <option value="">Todos los meses</option>
+                                    <!-- Los meses se cargarán con JavaScript -->
+                                </select>
+                            </div>
+                        </div>
+                        <ul id="expense-list" class="expense-list">
+                            <li class="empty-state">
+                                <i class="fas fa-receipt"></i>
+                                <p>No hay gastos registrados todavía.</p>
+                                <p>¡Agrega tu primer gasto usando el formulario!</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Reportes -->
+            <div id="reportes-section" class="main-content hidden">
+                <div class="content">
+                    <div class="card glass-effect">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-chart-pie"></i> Reportes y Estadísticas</h2>
+                        </div>
+                        <p>Visualiza tus gastos de manera gráfica y obtén insights sobre tus hábitos de gasto.</p>
+                        
+                        <div class="charts-container">
+                            <div class="chart">
+                                <h3>Gastos por Categoría</h3>
+                                <div class="chart-placeholder">
+                                    <div>
+                                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                        <p>Gráfico de gastos por categoría</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chart">
+                                <h3>Evolución Mensual</h3>
+                                <div class="chart-placeholder">
+                                    <div>
+                                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                                        <p>Gráfico de evolución mensual</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-item" style="margin-top: 30px;">
+                            <span>Categoría con más gastos:</span>
+                            <span id="top-category" class="summary-value">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Mes con más gastos:</span>
+                            <span id="top-month" class="summary-value">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Promedio mensual:</span>
+                            <span id="average-monthly" class="summary-value">RD$ 0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección de Configuración -->
+            <div id="configuracion-section" class="main-content hidden">
+                <div class="content">
+                    <div class="card glass-effect">
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-cog"></i> Configuración</h2>
+                        </div>
+                        
+                        <div class="settings-option">
+                            <div>
+                                <div class="settings-label">Notificaciones</div>
+                                <div class="settings-desc">Recibe alertas sobre tus gastos mensuales</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-option">
+                            <div>
+                                <div class="settings-label">Modo oscuro</div>
+                                <div class="settings-desc">Cambia la apariencia de la aplicación</div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="settings-option">
+                            <div>
+                                <div class="settings-label">Presupuesto mensual</div>
+                                <div class="settings-desc">Establece un límite de gastos mensual</div>
+                            </div>
+                            <input type="number" class="form-control" style="width: 120px;" placeholder="RD$ 0.00">
+                        </div>
+                        
+                        <div class="settings-option">
+                            <div>
+                                <div class="settings-label">Exportar datos</div>
+                                <div class="settings-desc">Descarga tu información en formato CSV</div>
+                            </div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-download"></i> Exportar
+                            </button>
+                        </div>
+                        
+                        <div class="settings-option">
+                            <div>
+                                <div class="settings-label">Eliminar todos los datos</div>
+                                <div class="settings-desc">Borra toda tu información permanentemente</div>
+                            </div>
+                            <button class="btn" style="background: var(--danger); color: white;">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <div class="copyright">
+                        &copy; 2025 GastoDominicano - Todos los derechos reservados
+                    </div>
+                    <div class="developer">
+                        Desarrollado por <strong>Cloud809</strong>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const loginPage = document.getElementById('login-page');
+            const app = document.getElementById('app');
+            const loginForm = document.getElementById('login-form');
+            const registerLink = document.getElementById('register-link');
+            const expenseForm = document.getElementById('expense-form');
+            const expenseList = document.getElementById('expense-list');
+            const categoryFilter = document.getElementById('category-filter');
+            const monthFilter = document.getElementById('month-filter');
+            const totalAmountElement = document.getElementById('total-amount');
+            const monthlyAmountElement = document.getElementById('monthly-amount');
+            const dailyAverageElement = document.getElementById('daily-average');
+            const navLinks = document.querySelectorAll('.nav-links a');
+            const sections = {
+                inicio: document.getElementById('inicio-section'),
+                reportes: document.getElementById('reportes-section'),
+                configuracion: document.getElementById('configuracion-section')
+            };
+            
+            // Cargar gastos desde localStorage o inicializar array vacío
+            let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            
+            // Manejar login (simulado)
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                
+                // Simular proceso de login
+                if (email && password) {
+                    loginPage.classList.add('hidden');
+                    app.classList.remove('hidden');
+                    
+                    // Mostrar notificación de bienvenida
+                    showNotification(`¡Bienvenido de nuevo!`, 'success');
+                }
+            });
+            
+            registerLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                showNotification('Funcionalidad de registro en desarrollo. Por ahora use cualquier correo y contraseña para iniciar sesión.', 'info');
+            });
+            
+            // Navegación entre secciones
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    
+                    // Actualizar navegación activa
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Ocultar todas las secciones
+                    Object.values(sections).forEach(sec => {
+                        sec.classList.add('hidden');
+                    });
+                    
+                    // Mostrar la sección seleccionada
+                    if (sections[section]) {
+                        sections[section].classList.remove('hidden');
+                        
+                        // Si es la sección de reportes, actualizar estadísticas
+                        if (section === 'reportes') {
+                            updateReports();
+                        }
+                    }
+                });
+            });
+            
+            // Establecer fecha actual por defecto
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Cargar opciones de meses
+            populateMonthFilter();
+            
+            // Mostrar gastos al cargar
+            renderExpenses();
+            updateSummary();
+            
+            // Manejar envío del formulario
+            expenseForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const description = document.getElementById('description').value;
+                const amount = parseFloat(document.getElementById('amount').value);
+                const category = document.getElementById('category').value;
+                const date = document.getElementById('date').value;
+                
+                if (!description || !amount || !category || !date) {
+                    showNotification('Por favor, completa todos los campos', 'error');
+                    return;
+                }
+                
+                // Crear nuevo gasto
+                const newExpense = {
+                    id: Date.now(), // ID único basado en timestamp
+                    description,
+                    amount,
+                    category,
+                    date
+                };
+                
+                // Agregar al array
+                expenses.push(newExpense);
+                
+                // Guardar en localStorage
+                saveExpenses();
+                
+                // Actualizar la UI
+                renderExpenses();
+                updateSummary();
+                populateMonthFilter();
+                
+                // Resetear formulario
+                expenseForm.reset();
+                document.getElementById('date').valueAsDate = new Date();
+                
+                // Mostrar feedback
+                showNotification('Gasto agregado correctamente', 'success');
+            });
+            
+            // Manejar filtros
+            categoryFilter.addEventListener('change', renderExpenses);
+            monthFilter.addEventListener('change', renderExpenses);
+            
+            // Función para guardar gastos en localStorage
+            function saveExpenses() {
+                localStorage.setItem('expenses', JSON.stringify(expenses));
+            }
+            
+            // Función para renderizar la lista de gastos
+            function renderExpenses() {
+                const categoryValue = categoryFilter.value;
+                const monthValue = monthFilter.value;
+                
+                // Filtrar gastos
+                let filteredExpenses = expenses;
+                
+                if (categoryValue) {
+                    filteredExpenses = filteredExpenses.filter(expense => expense.category === categoryValue);
+                }
+                
+                if (monthValue) {
+                    filteredExpenses = filteredExpenses.filter(expense => {
+                        const expenseDate = new Date(expense.date);
+                        return `${expenseDate.getFullYear()}-${String(expenseDate.getMonth() + 1).padStart(2, '0')}` === monthValue;
+                    });
+                }
+                
+                // Ordenar por fecha (más reciente primero)
+                filteredExpenses.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Mostrar en la lista
+                if (filteredExpenses.length === 0) {
+                    expenseList.innerHTML = `
+                        <li class="empty-state">
+                            <i class="fas fa-receipt"></i>
+                            <p>No hay gastos que coincidan con los filtros.</p>
+                        </li>
+                    `;
+                    return;
+                }
+                
+                expenseList.innerHTML = '';
+                
+                filteredExpenses.forEach(expense => {
+                    const date = new Date(expense.date);
+                    const formattedDate = date.toLocaleDateString('es-DO', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    
+                    const categoryNames = {
+                        'comida': 'Comida',
+                        'transporte': 'Transporte',
+                        'servicios': 'Servicios',
+                        'entretenimiento': 'Entretenimiento',
+                        'salud': 'Salud',
+                        'ropa': 'Ropa',
+                        'educacion': 'Educación',
+                        'otros': 'Otros'
+                    };
+                    
+                    const categoryColors = {
+                        'comida': '#4361ee',
+                        'transporte': '#7209b7',
+                        'servicios': '#06d6a0',
+                        'entretenimiento': '#ffd166',
+                        'salud': '#ef476f',
+                        'ropa': '#f72585',
+                        'educacion': '#3a86ff',
+                        'otros': '#6c757d'
+                    };
+                    
+                    const listItem = document.createElement('li');
+                    listItem.className = 'expense-item fade-in';
+                    listItem.innerHTML = `
+                        <div class="expense-details">
+                            <div class="expense-title">${expense.description}</div>
+                            <div class="expense-meta">
+                                <span>${formattedDate}</span>
+                                <span class="expense-category" style="background: rgba(${hexToRgb(categoryColors[expense.category])}, 0.1); color: ${categoryColors[expense.category]};">${categoryNames[expense.category]}</span>
+                            </div>
+                        </div>
+                        <div class="expense-amount">RD$ ${expense.amount.toFixed(2)}</div>
+                        <button class="btn-icon" onclick="deleteExpense(${expense.id})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    `;
+                    
+                    expenseList.appendChild(listItem);
+                });
+            }
+            
+            // Función para convertir hex a rgb
+            function hexToRgb(hex) {
+                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                return result ? 
+                    `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` 
+                    : null;
+            }
+            
+            // Función para actualizar el resumen
+            function updateSummary() {
+                const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+                totalAmountElement.textContent = `RD$ ${total.toFixed(2)}`;
+                
+                // Calcular gasto mensual (mes actual)
+                const now = new Date();
+                const currentMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+                
+                const monthlyExpenses = expenses.filter(expense => {
+                    const expenseDate = new Date(expense.date);
+                    const expenseMonth = `${expenseDate.getFullYear()}-${String(expenseDate.getMonth() + 1).padStart(2, '0')}`;
+                    return expenseMonth === currentMonth;
+                });
+                
+                const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+                monthlyAmountElement.textContent = `RD$ ${monthlyTotal.toFixed(2)}`;
+                
+                // Calcular promedio diario (mes actual)
+                const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+                const dailyAverage = monthlyTotal / daysInMonth;
+                dailyAverageElement.textContent = `RD$ ${dailyAverage.toFixed(2)}`;
+            }
+            
+            // Función para actualizar reportes
+            function updateReports() {
+                if (expenses.length === 0) {
+                    document.getElementById('top-category').textContent = '-';
+                    document.getElementById('top-month').textContent = '-';
+                    document.getElementById('average-monthly').textContent = 'RD$ 0.00';
+                    return;
+                }
+                
+                // Calcular categoría con más gastos
+                const categoryTotals = {};
+                expenses.forEach(expense => {
+                    if (!categoryTotals[expense.category]) {
+                        categoryTotals[expense.category] = 0;
+                    }
+                    categoryTotals[expense.category] += expense.amount;
+                });
+                
+                let topCategory = '';
+                let maxCategoryAmount = 0;
+                
+                for (const category in categoryTotals) {
+                    if (categoryTotals[category] > maxCategoryAmount) {
+                        maxCategoryAmount = categoryTotals[category];
+                        topCategory = category;
+                    }
+                }
+                
+                const categoryNames = {
+                    'comida': 'Comida',
+                    'transporte': 'Transporte',
+                    'servicios': 'Servicios',
+                    'entretenimiento': 'Entretenimiento',
+                    'salud': 'Salud',
+                    'ropa': 'Ropa',
+                    'educacion': 'Educación',
+                    'otros': 'Otros'
+                };
+                
+                document.getElementById('top-category').textContent = categoryNames[topCategory] || '-';
+                
+                // Calcular mes con más gastos
+                const monthTotals = {};
+                expenses.forEach(expense => {
+                    const date = new Date(expense.date);
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    
+                    if (!monthTotals[monthKey]) {
+                        monthTotals[monthKey] = 0;
+                    }
+                    monthTotals[monthKey] += expense.amount;
+                });
+                
+                let topMonth = '';
+                let maxMonthAmount = 0;
+                
+                for (const month in monthTotals) {
+                    if (monthTotals[month] > maxMonthAmount) {
+                        maxMonthAmount = monthTotals[month];
+                        topMonth = month;
+                    }
+                }
+                
+                const months = [
+                    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ];
+                
+                if (topMonth) {
+                    const [year, month] = topMonth.split('-');
+                    document.getElementById('top-month').textContent = `${months[parseInt(month) - 1]} ${year}`;
+                } else {
+                    document.getElementById('top-month').textContent = '-';
+                }
+                
+                // Calcular promedio mensual
+                const monthlyAverages = {};
+                expenses.forEach(expense => {
+                    const date = new Date(expense.date);
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    
+                    if (!monthlyAverages[monthKey]) {
+                        monthlyAverages[monthKey] = {
+                            total: 0,
+                            count: 0
+                        };
+                    }
+                    
+                    monthlyAverages[monthKey].total += expense.amount;
+                    monthlyAverages[monthKey].count += 1;
+                });
+                
+                let totalMonthly = 0;
+                let monthCount = 0;
+                
+                for (const month in monthlyAverages) {
+                    totalMonthly += monthlyAverages[month].total;
+                    monthCount += 1;
+                }
+                
+                const averageMonthly = monthCount > 0 ? totalMonthly / monthCount : 0;
+                document.getElementById('average-monthly').textContent = `RD$ ${averageMonthly.toFixed(2)}`;
+            }
+            
+            // Función para poblar el filtro de meses
+            function populateMonthFilter() {
+                const months = [
+                    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                ];
+                
+                // Limpiar select
+                monthFilter.innerHTML = '<option value="">Todos los meses</option>';
+                
+                // Obtener meses únicos de los gastos
+                const monthYears = {};
+                expenses.forEach(expense => {
+                    const date = new Date(expense.date);
+                    const year = date.getFullYear();
+                    const month = date.getMonth();
+                    const key = `${year}-${String(month + 1).padStart(2, '0')}`;
+                    
+                    if (!monthYears[key]) {
+                        monthYears[key] = {
+                            year,
+                            month
+                        };
+                    }
+                });
+                
+                // Ordenar meses (más reciente primero)
+                const sortedMonthYears = Object.keys(monthYears).sort().reverse();
+                
+                // Agregar opciones al select
+                sortedMonthYears.forEach(key => {
+                    const { year, month } = monthYears[key];
+                    const option = document.createElement('option');
+                    option.value = key;
+                    option.textContent = `${months[month]} ${year}`;
+                    monthFilter.appendChild(option);
+                });
+            }
+            
+            // Función para mostrar notificaciones
+            function showNotification(message, type = 'info') {
+                // Crear elemento de notificación
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.position = 'fixed';
+                notification.style.bottom = '20px';
+                notification.style.right = '20px';
+                notification.style.padding = '14px 24px';
+                notification.style.borderRadius = '12px';
+                notification.style.color = 'white';
+                notification.style.fontWeight = '500';
+                notification.style.zIndex = '1000';
+                notification.style.boxShadow = '0 10px 25px rgba(0,0,0,0.2)';
+                notification.style.display = 'flex';
+                notification.style.alignItems = 'center';
+                notification.style.gap = '10px';
+                
+                // Añadir icono según el tipo
+                let iconClass = 'fas fa-info-circle';
+                if (type === 'success') {
+                    notification.style.background = 'var(--success)';
+                    iconClass = 'fas fa-check-circle';
+                } else if (type === 'error') {
+                    notification.style.background = 'var(--danger)';
+                    iconClass = 'fas fa-exclamation-circle';
+                } else if (type === 'warning') {
+                    notification.style.background = 'var(--warning)';
+                    notification.style.color = 'var(--dark)';
+                    iconClass = 'fas fa-exclamation-triangle';
+                } else {
+                    notification.style.background = 'var(--primary)';
+                }
+                
+                notification.innerHTML = `<i class="${iconClass}"></i> ${message}`;
+                
+                document.body.appendChild(notification);
+                
+                // Eliminar después de 4 segundos
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transition = 'opacity 0.5s ease';
+                    setTimeout(() => {
+                        if (notification.parentNode) {
+                            document.body.removeChild(notification);
+                        }
+                    }, 500);
+                }, 4000);
+            }
+            
+            // Función global para eliminar gastos (necesaria para el onclick)
+            window.deleteExpense = function(id) {
+                if (confirm('¿Estás seguro de que quieres eliminar este gasto?')) {
+                    expenses = expenses.filter(expense => expense.id !== id);
+                    saveExpenses();
+                    renderExpenses();
+                    updateSummary();
+                    populateMonthFilter();
+                    showNotification('Gasto eliminado correctamente', 'success');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
