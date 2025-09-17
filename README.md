@@ -1,7 +1,7 @@
 # expensetrackerdo
 Expense tracker the dominican way 🇩🇴
 
-# GastoDominicano - Expense Tracker
+# GastoRD - Expense Tracker
 
 ![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
@@ -102,6 +102,6 @@ Abre un Pull Request
 Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
 
 # 👨‍💻 Desarrolladores
-Sarah Del Rosario
-David
+Sarah
+Edwin
 Anthony
