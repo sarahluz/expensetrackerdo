@@ -6,6 +6,7 @@
     <title>GastoRD - Controla tus gastos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primary: #4361ee;
@@ -32,6 +33,29 @@
             --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        .dark-mode {
+            --primary: #5a75ff;
+            --primary-dark: #4a65e4;
+            --secondary: #8329c7;
+            --accent: #ff3b8d;
+            --success: #07e6a9;
+            --warning: #ffda7e;
+            --danger: #f5577f;
+            --dark: #f8f9fa;
+            --light: #121212;
+            --gray-100: #1a1a1a;
+            --gray-200: #2d2d2d;
+            --gray-300: #404040;
+            --gray-400: #5a5a5a;
+            --gray-500: #7a7a7a;
+            --gray-600: #9a9a9a;
+            --gray-700: #bababa;
+            --gray-800: #dbdbdb;
+            --gray-900: #ffffff;
+            
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -47,6 +71,12 @@
             display: flex;
             flex-direction: column;
             padding: 0;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode body {
+            background: linear-gradient(135deg, #121212 0%, #1a1a2e 100%);
+            color: var(--gray-800);
         }
 
         .app-container {
@@ -66,6 +96,13 @@
             top: 0;
             z-index: 100;
             border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode .header {
+            background: rgba(26, 26, 46, 0.95);
+            color: var(--dark);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .header-content {
@@ -106,6 +143,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .dark-mode .nav-links a {
+            color: var(--gray-300);
         }
 
         .nav-links a:hover, .nav-links a.active {
@@ -160,9 +201,18 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
+        .dark-mode .card {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .card:hover {
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             transform: translateY(-5px);
+        }
+
+        .dark-mode .card:hover {
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         .card-header {
@@ -172,6 +222,10 @@
             margin-bottom: 24px;
             padding-bottom: 16px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .dark-mode .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .card-title {
@@ -200,6 +254,10 @@
             font-size: 0.95rem;
         }
 
+        .dark-mode .form-label {
+            color: var(--gray-300);
+        }
+
         .form-control {
             width: 100%;
             padding: 14px 16px;
@@ -208,6 +266,13 @@
             font-size: 1rem;
             transition: var(--transition);
             background: rgba(255, 255, 255, 0.6);
+            color: var(--gray-800);
+        }
+
+        .dark-mode .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--gray-600);
+            color: var(--gray-300);
         }
 
         .form-control:focus {
@@ -262,10 +327,20 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
+        .dark-mode .expense-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .expense-item:hover {
             background: rgba(255, 255, 255, 0.8);
             transform: translateX(4px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode .expense-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .expense-details {
@@ -283,6 +358,10 @@
             gap: 12px;
             font-size: 0.85rem;
             color: var(--gray-600);
+        }
+
+        .dark-mode .expense-meta {
+            color: var(--gray-400);
         }
 
         .expense-amount {
@@ -325,6 +404,10 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
 
+        .dark-mode .summary-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .summary-item:last-child {
             border-bottom: none;
         }
@@ -359,6 +442,11 @@
             color: white;
             padding: 30px 0;
             margin-top: auto;
+            transition: background 0.3s ease;
+        }
+
+        .dark-mode .footer {
+            background: #0f0f1a;
         }
 
         .footer-content {
@@ -415,6 +503,11 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
+        .dark-mode .login-card {
+            background: rgba(26, 26, 46, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .login-logo {
             text-align: center;
             margin-bottom: 35px;
@@ -432,10 +525,18 @@
             font-weight: 700;
         }
 
+        .dark-mode .login-logo h1 {
+            color: var(--gray-300);
+        }
+
         .login-footer {
             text-align: center;
             margin-top: 30px;
             color: var(--gray-600);
+        }
+
+        .dark-mode .login-footer {
+            color: var(--gray-400);
         }
 
         .login-footer a {
@@ -469,6 +570,10 @@
             box-shadow: var(--card-shadow);
         }
 
+        .dark-mode .chart {
+            background: rgba(26, 26, 46, 0.8);
+        }
+
         .chart-placeholder {
             height: 300px;
             display: flex;
@@ -478,6 +583,11 @@
             border-radius: 12px;
             color: var(--gray-500);
             font-weight: 600;
+        }
+
+        .dark-mode .chart-placeholder {
+            background: var(--gray-200);
+            color: var(--gray-400);
         }
 
         /* Configuración Section */
@@ -493,6 +603,10 @@
             border-bottom: 1px solid var(--gray-200);
         }
 
+        .dark-mode .settings-option {
+            border-bottom: 1px solid var(--gray-700);
+        }
+
         .settings-option:last-child {
             border-bottom: none;
         }
@@ -505,6 +619,10 @@
             font-size: 0.9rem;
             color: var(--gray-600);
             margin-top: 4px;
+        }
+
+        .dark-mode .settings-desc {
+            color: var(--gray-400);
         }
 
         .switch {
@@ -565,6 +683,47 @@
             margin-top: 16px;
         }
 
+        /* Budget Progress */
+        .budget-progress {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: var(--gray-200);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .dark-mode .progress-bar {
+            background-color: var(--gray-700);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-safe {
+            background-color: var(--success);
+        }
+
+        .progress-warning {
+            background-color: var(--warning);
+        }
+
+        .progress-danger {
+            background-color: var(--danger);
+        }
+
+        .budget-status {
+            font-size: 0.9rem;
+            margin-top: 5px;
+            text-align: right;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -593,6 +752,11 @@
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
+        .dark-mode .glass-effect {
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         /* Modern scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -601,6 +765,10 @@
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.05);
             border-radius: 10px;
+        }
+
+        .dark-mode ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
         }
 
         ::-webkit-scrollbar-thumb {
@@ -719,6 +887,16 @@
                                 <span>Gasto diario promedio:</span>
                                 <span id="daily-average" class="summary-value">RD$ 0.00</span>
                             </div>
+                            <div class="summary-item">
+                                <span>Presupuesto mensual:</span>
+                                <span id="budget-amount" class="summary-value">RD$ 0.00</span>
+                            </div>
+                            <div class="budget-progress">
+                                <div class="progress-bar">
+                                    <div id="budget-progress-fill" class="progress-fill progress-safe" style="width: 0%"></div>
+                                </div>
+                                <div id="budget-status" class="budget-status">0% utilizado</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -775,21 +953,15 @@
                         <div class="charts-container">
                             <div class="chart">
                                 <h3>Gastos por Categoría</h3>
-                                <div class="chart-placeholder">
-                                    <div>
-                                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                                        <p>Gráfico de gastos por categoría</p>
-                                    </div>
+                                <div class="chart-container">
+                                    <canvas id="category-chart"></canvas>
                                 </div>
                             </div>
                             
                             <div class="chart">
                                 <h3>Evolución Mensual</h3>
-                                <div class="chart-placeholder">
-                                    <div>
-                                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-bottom: 15px;"></i>
-                                        <p>Gráfico de evolución mensual</p>
-                                    </div>
+                                <div class="chart-container">
+                                    <canvas id="monthly-chart"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -824,7 +996,7 @@
                                 <div class="settings-desc">Recibe alertas sobre tus gastos mensuales</div>
                             </div>
                             <label class="switch">
-                                <input type="checkbox" checked>
+                                <input type="checkbox" id="notifications-toggle" checked>
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -835,7 +1007,7 @@
                                 <div class="settings-desc">Cambia la apariencia de la aplicación</div>
                             </div>
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="dark-mode-toggle">
                                 <span class="slider"></span>
                             </label>
                         </div>
@@ -845,7 +1017,7 @@
                                 <div class="settings-label">Presupuesto mensual</div>
                                 <div class="settings-desc">Establece un límite de gastos mensual</div>
                             </div>
-                            <input type="number" class="form-control" style="width: 120px;" placeholder="RD$ 0.00">
+                            <input type="number" id="monthly-budget-input" class="form-control" style="width: 120px;" placeholder="RD$ 0.00" min="0">
                         </div>
                         
                         <div class="settings-option">
@@ -853,7 +1025,7 @@
                                 <div class="settings-label">Exportar datos</div>
                                 <div class="settings-desc">Descarga tu información en formato CSV</div>
                             </div>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" id="export-data-btn">
                                 <i class="fas fa-download"></i> Exportar
                             </button>
                         </div>
@@ -863,7 +1035,7 @@
                                 <div class="settings-label">Eliminar todos los datos</div>
                                 <div class="settings-desc">Borra toda tu información permanentemente</div>
                             </div>
-                            <button class="btn" style="background: var(--danger); color: white;">
+                            <button class="btn" style="background: var(--danger); color: white;" id="delete-all-data">
                                 <i class="fas fa-trash"></i> Eliminar
                             </button>
                         </div>
@@ -878,7 +1050,7 @@
                         &copy; 2025 GastoRD - Todos los derechos reservados
                     </div>
                     <div class="developer">
-                        Desarrollado por <strong>Grupo 7 Desarrollo Web</strong>
+                        Desarrollado por <strong>Grupo SEA Desarrollo Web</strong>
                     </div>
                 </div>
             </footer>
@@ -899,6 +1071,9 @@
             const totalAmountElement = document.getElementById('total-amount');
             const monthlyAmountElement = document.getElementById('monthly-amount');
             const dailyAverageElement = document.getElementById('daily-average');
+            const budgetAmountElement = document.getElementById('budget-amount');
+            const budgetProgressFill = document.getElementById('budget-progress-fill');
+            const budgetStatus = document.getElementById('budget-status');
             const navLinks = document.querySelectorAll('.nav-links a');
             const sections = {
                 inicio: document.getElementById('inicio-section'),
@@ -906,8 +1081,28 @@
                 configuracion: document.getElementById('configuracion-section')
             };
             
+            // Configuración
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const monthlyBudgetInput = document.getElementById('monthly-budget-input');
+            const exportDataBtn = document.getElementById('export-data-btn');
+            const deleteAllDataBtn = document.getElementById('delete-all-data');
+            
             // Cargar gastos desde localStorage o inicializar array vacío
             let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+            
+            // Cargar configuración desde localStorage
+            let settings = JSON.parse(localStorage.getItem('settings')) || {
+                darkMode: false,
+                monthlyBudget: 0,
+                notifications: true
+            };
+            
+            // Inicializar gráficos
+            let categoryChart = null;
+            let monthlyChart = null;
+            
+            // Aplicar configuración guardada
+            applySettings();
             
             // Manejar login (simulado)
             loginForm.addEventListener('submit', function(e) {
@@ -1012,6 +1207,57 @@
             // Manejar filtros
             categoryFilter.addEventListener('change', renderExpenses);
             monthFilter.addEventListener('change', renderExpenses);
+            
+            // Configuración - Modo oscuro
+            darkModeToggle.addEventListener('change', function() {
+                settings.darkMode = this.checked;
+                saveSettings();
+                applySettings();
+            });
+            
+            // Configuración - Presupuesto mensual
+            monthlyBudgetInput.addEventListener('change', function() {
+                settings.monthlyBudget = parseFloat(this.value) || 0;
+                saveSettings();
+                updateSummary();
+            });
+            
+            // Configuración - Exportar datos
+            exportDataBtn.addEventListener('click', function() {
+                exportDataToCSV();
+            });
+            
+            // Configuración - Eliminar todos los datos
+            deleteAllDataBtn.addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que quieres eliminar todos los datos? Esta acción no se puede deshacer.')) {
+                    expenses = [];
+                    saveExpenses();
+                    renderExpenses();
+                    updateSummary();
+                    populateMonthFilter();
+                    showNotification('Todos los datos han sido eliminados', 'success');
+                }
+            });
+            
+            // Función para aplicar configuración
+            function applySettings() {
+                // Modo oscuro
+                if (settings.darkMode) {
+                    document.body.classList.add('dark-mode');
+                    darkModeToggle.checked = true;
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    darkModeToggle.checked = false;
+                }
+                
+                // Presupuesto mensual
+                monthlyBudgetInput.value = settings.monthlyBudget;
+            }
+            
+            // Función para guardar configuración
+            function saveSettings() {
+                localStorage.setItem('settings', JSON.stringify(settings));
+            }
             
             // Función para guardar gastos en localStorage
             function saveExpenses() {
@@ -1133,6 +1379,37 @@
                 const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
                 const dailyAverage = monthlyTotal / daysInMonth;
                 dailyAverageElement.textContent = `RD$ ${dailyAverage.toFixed(2)}`;
+                
+                // Actualizar información del presupuesto
+                const monthlyBudget = settings.monthlyBudget || 0;
+                budgetAmountElement.textContent = `RD$ ${monthlyBudget.toFixed(2)}`;
+                
+                if (monthlyBudget > 0) {
+                    const budgetPercentage = Math.min((monthlyTotal / monthlyBudget) * 100, 100);
+                    budgetProgressFill.style.width = `${budgetPercentage}%`;
+                    
+                    // Cambiar color según el porcentaje
+                    if (budgetPercentage < 70) {
+                        budgetProgressFill.className = 'progress-fill progress-safe';
+                    } else if (budgetPercentage < 90) {
+                        budgetProgressFill.className = 'progress-fill progress-warning';
+                    } else {
+                        budgetProgressFill.className = 'progress-fill progress-danger';
+                    }
+                    
+                    budgetStatus.textContent = `${budgetPercentage.toFixed(1)}% utilizado`;
+                    
+                    // Mostrar alerta si se excede el presupuesto
+                    if (monthlyTotal > monthlyBudget) {
+                        budgetStatus.innerHTML += ' <i class="fas fa-exclamation-triangle" style="color: var(--danger);"></i>';
+                        if (settings.notifications) {
+                            showNotification('¡Has excedido tu presupuesto mensual!', 'warning');
+                        }
+                    }
+                } else {
+                    budgetProgressFill.style.width = '0%';
+                    budgetStatus.textContent = 'Presupuesto no establecido';
+                }
             }
             
             // Función para actualizar reportes
@@ -1141,6 +1418,11 @@
                     document.getElementById('top-category').textContent = '-';
                     document.getElementById('top-month').textContent = '-';
                     document.getElementById('average-monthly').textContent = 'RD$ 0.00';
+                    
+                    // Limpiar gráficos si no hay datos
+                    if (categoryChart) categoryChart.destroy();
+                    if (monthlyChart) monthlyChart.destroy();
+                    
                     return;
                 }
                 
@@ -1237,6 +1519,129 @@
                 
                 const averageMonthly = monthCount > 0 ? totalMonthly / monthCount : 0;
                 document.getElementById('average-monthly').textContent = `RD$ ${averageMonthly.toFixed(2)}`;
+                
+                // Generar gráficos
+                generateCharts(categoryTotals, monthTotals);
+            }
+            
+            // Función para generar gráficos
+            function generateCharts(categoryTotals, monthTotals) {
+                const categoryColors = {
+                    'comida': '#4361ee',
+                    'transporte': '#7209b7',
+                    'servicios': '#06d6a0',
+                    'entretenimiento': '#ffd166',
+                    'salud': '#ef476f',
+                    'ropa': '#f72585',
+                    'educacion': '#3a86ff',
+                    'otros': '#6c757d'
+                };
+                
+                const categoryNames = {
+                    'comida': 'Comida',
+                    'transporte': 'Transporte',
+                    'servicios': 'Servicios',
+                    'entretenimiento': 'Entretenimiento',
+                    'salud': 'Salud',
+                    'ropa': 'Ropa',
+                    'educacion': 'Educación',
+                    'otros': 'Otros'
+                };
+                
+                // Gráfico de categorías
+                const categoryCtx = document.getElementById('category-chart').getContext('2d');
+                
+                if (categoryChart) {
+                    categoryChart.destroy();
+                }
+                
+                categoryChart = new Chart(categoryCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(categoryTotals).map(cat => categoryNames[cat]),
+                        datasets: [{
+                            data: Object.values(categoryTotals),
+                            backgroundColor: Object.keys(categoryTotals).map(cat => categoryColors[cat]),
+                            borderWidth: 2,
+                            borderColor: settings.darkMode ? '#1a1a2e' : '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: settings.darkMode ? '#dbdbdb' : '#495057',
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Gráfico de evolución mensual
+                const monthlyCtx = document.getElementById('monthly-chart').getContext('2d');
+                
+                // Ordenar meses cronológicamente
+                const sortedMonths = Object.keys(monthTotals).sort();
+                const monthLabels = sortedMonths.map(month => {
+                    const [year, monthNum] = month.split('-');
+                    return `${months[parseInt(monthNum) - 1]} ${year}`;
+                });
+                
+                if (monthlyChart) {
+                    monthlyChart.destroy();
+                }
+                
+                monthlyChart = new Chart(monthlyCtx, {
+                    type: 'line',
+                    data: {
+                        labels: monthLabels,
+                        datasets: [{
+                            label: 'Gastos mensuales',
+                            data: sortedMonths.map(month => monthTotals[month]),
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            borderColor: '#4361ee',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: settings.darkMode ? '#dbdbdb' : '#495057'
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: settings.darkMode ? '#9a9a9a' : '#6c757d'
+                                },
+                                grid: {
+                                    color: settings.darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    color: settings.darkMode ? '#9a9a9a' : '#6c757d'
+                                },
+                                grid: {
+                                    color: settings.darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+                                }
+                            }
+                        }
+                    }
+                });
             }
             
             // Función para poblar el filtro de meses
@@ -1278,6 +1683,38 @@
                 });
             }
             
+            // Función para exportar datos a CSV
+            function exportDataToCSV() {
+                if (expenses.length === 0) {
+                    showNotification('No hay datos para exportar', 'warning');
+                    return;
+                }
+                
+                let csvContent = "data:text/csv;charset=utf-8,";
+                csvContent += "ID,Descripción,Monto,Categoría,Fecha\n";
+                
+                expenses.forEach(expense => {
+                    const row = [
+                        expense.id,
+                        `"${expense.description}"`,
+                        expense.amount,
+                        expense.category,
+                        expense.date
+                    ].join(',');
+                    csvContent += row + "\n";
+                });
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", "gastos.csv");
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                showNotification('Datos exportados correctamente', 'success');
+            }
+            
             // Función para mostrar notificaciones
             function showNotification(message, type = 'info') {
                 // Crear elemento de notificación
@@ -1295,6 +1732,8 @@
                 notification.style.display = 'flex';
                 notification.style.alignItems = 'center';
                 notification.style.gap = '10px';
+                notification.style.maxWidth = '400px';
+                notification.style.wordBreak = 'break-word';
                 
                 // Añadir icono según el tipo
                 let iconClass = 'fas fa-info-circle';
